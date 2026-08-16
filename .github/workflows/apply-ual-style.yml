@@ -35,11 +35,23 @@ jobs:
                   raise SystemExit('No se encontró </body>')
               s = s.replace(needle, injection + needle, 1)
 
+          if '<!-- UAL-STUDY -->' not in s:
+              needle = '</head>'
+              injection = '\n  <!-- UAL-STUDY -->\n  <link rel="stylesheet" href="study-redesign.css">\n'
+              if needle not in s:
+                  raise SystemExit('No se encontró </head>')
+              s = s.replace(needle, injection + needle, 1)
+              needle = '</body>'
+              injection = '\n  <script src="study-redesign.js"></script>\n'
+              if needle not in s:
+                  raise SystemExit('No se encontró </body>')
+              s = s.replace(needle, injection + needle, 1)
+
           p.write_text(s, encoding='utf-8')
       - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html ual-redesign.css ual-dashboard.js
-          git diff --cached --quiet || git commit -m "feat: integrate UAL dashboard"
+          git add index.html ual-redesign.css ual-dashboard.js study-redesign.css study-redesign.js
+          git diff --cached --quiet || git commit -m "feat: integrate redesigned study view"
           git push
