@@ -1,0 +1,40 @@
+name: Apply UAL visual system
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  apply-style:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inject UAL stylesheet
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          marker = '<!-- UAL-REDESIGN -->'
+          if marker not in s:
+              needle = '</head>'
+              injection = '\n  ' + marker + '\n  <link rel="stylesheet" href="ual-redesign.css">\n'
+              if needle not in s:
+                  raise SystemExit('No se encontró </head>')
+              s = s.replace(needle, injection + needle, 1)
+              # Remove the emoji-heavy header copy while preserving the existing structure.
+              s = s.replace('📚 Oposición Auxiliar Administrativo — Universidad de Almería', 'Oposición Auxiliar Administrativo — Universidad de Almería')
+              s = s.replace('📖 Estudiar', 'Estudiar').replace('📝 Hacer test', 'Hacer test').replace('📊 Progreso', 'Progreso')
+              p.write_text(s, encoding='utf-8')
+          else:
+              print('UAL redesign already applied')
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html ual-redesign.css
+          git diff --cached --quiet || git commit -m "style: apply UAL visual redesign"
+          git push
