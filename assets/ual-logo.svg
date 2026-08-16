@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" role="img" aria-label="Universidad de Almería">
+  <g fill="none" stroke="#fff" stroke-width="8">
+    <circle cx="225" cy="250" r="190"/>
+    <circle cx="225" cy="250" r="166"/>
+  </g>
+  <g fill="#fff" transform="translate(225 250)">
+    <path d="M0-145c18 32 21 57 0 92-21-35-18-60 0-92z"/>
+    <path d="M145 0c-32 18-57 21-92 0 35-21 60-18 92 0z"/>
+    <path d="M0 145c-18-32-21-57 0-92 21 35 18 60 0 92z"/>
+    <path d="M-145 0c32-18 57-21 92 0-35 21-60 18-92 0z"/>
+    <g transform="rotate(45)"><path d="M0-145c18 32 21 57 0 92-21-35-18-60 0-92z"/></g>
+    <g transform="rotate(90)"><path d="M0-145c18 32 21 57 0 92-21-35-18-60 0-92z"/></g>
+    <g transform="rotate(135)"><path d="M0-145c18 32 21 57 0 92-21-35-18-60 0-92z"/></g>
+    <g transform="rotate(180)"><path d="M0-145c18 32 21 57 0 92-21-35-18-60 0-92z"/></g>
+    <g transform="rotate(225)"><path d="M0-145c18 32 21 57 0 92-21-35-18-60 0-92z"/></g>
+    <g transform="rotate(270)"><path d="M0-145c18 32 21 57 0 92-21-35-18-60 0-92z"/></g>
+    <g transform="rotate(315)"><path d="M0-145c18 32 21 57 0 92-21-35-18-60 0-92z"/></g>
+    <circle r="46" fill="#326195" stroke="#fff" stroke-width="7"/>
+    <path d="M-18 22V-18c0-16 12-28 28-28s28 12 28 28v40c-10 10-46 10-56 0z"/>
+    <circle cx="10" cy="-4" r="7" fill="#326195"/>
+  </g>
+  <text x="455" y="210" fill="#fff" font-family="Georgia,serif" font-size="86" font-weight="700">UNIVERSIDAD</text>
+  <text x="455" y="305" fill="#fff" font-family="Georgia,serif" font-size="86" font-weight="700">DE ALMERÍA</text>
+</svg>
