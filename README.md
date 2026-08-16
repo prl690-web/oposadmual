@@ -1,5 +1,4 @@
 # Oposición Auxiliar Administrativo — Universidad de Almería
-
 Material de estudio para la convocatoria de la Escala Auxiliar Administrativa (C2) de la Universidad de Almería (concurso-oposición, 21 plazas).
 
 ## 📝 App de estudio y test
@@ -15,11 +14,11 @@ La app tiene tres pestañas:
 
 ## 📄 Resúmenes en Word
 
-En la carpeta [`docs/`](docs/) tienes cada resumen también en formato `.docx`, por si prefieres imprimirlo o anotarlo a mano:
+Aquí tienes cada resumen también en formato `.docx`, por si prefieres imprimirlo o anotarlo a mano:
 
-- [Tema 1 — Ley 39/2015, Procedimiento Administrativo Común](docs/Tema01_Ley39-2015_Resumen.docx)
-- [Tema 3 — LO 3/2018, Protección de Datos y Garantía de los Derechos Digitales](docs/Tema03_LOPD_Resumen.docx)
-- [Tema 9 — LO 2/2023, Sistema Universitario (LOSU)](docs/Tema09_LOSU_Resumen.docx)
+- [Tema 1 — Ley 39/2015, Procedimiento Administrativo Común](Tema01_Ley39-2015_Resumen.docx)
+- [Tema 3 — LO 3/2018, Protección de Datos y Garantía de los Derechos Digitales](Tema03_LOPD_Resumen.docx)
+- [Tema 9 — LO 2/2023, Sistema Universitario (LOSU)](Tema09_LOSU_Resumen.docx)
 
 ## Estado del proyecto
 
