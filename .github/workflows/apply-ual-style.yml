@@ -12,29 +12,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Inject UAL stylesheet
+      - name: Inject UAL visual system
         shell: python
         run: |
           from pathlib import Path
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-          marker = '<!-- UAL-REDESIGN -->'
-          if marker not in s:
+
+          if '<!-- UAL-REDESIGN -->' not in s:
               needle = '</head>'
-              injection = '\n  ' + marker + '\n  <link rel="stylesheet" href="ual-redesign.css">\n'
+              injection = '\n  <!-- UAL-REDESIGN -->\n  <link rel="stylesheet" href="ual-redesign.css">\n'
               if needle not in s:
                   raise SystemExit('No se encontró </head>')
               s = s.replace(needle, injection + needle, 1)
-              # Remove the emoji-heavy header copy while preserving the existing structure.
               s = s.replace('📚 Oposición Auxiliar Administrativo — Universidad de Almería', 'Oposición Auxiliar Administrativo — Universidad de Almería')
               s = s.replace('📖 Estudiar', 'Estudiar').replace('📝 Hacer test', 'Hacer test').replace('📊 Progreso', 'Progreso')
-              p.write_text(s, encoding='utf-8')
-          else:
-              print('UAL redesign already applied')
+
+          if '<!-- UAL-DASHBOARD -->' not in s:
+              needle = '</body>'
+              injection = '\n  <!-- UAL-DASHBOARD -->\n  <script src="ual-dashboard.js"></script>\n'
+              if needle not in s:
+                  raise SystemExit('No se encontró </body>')
+              s = s.replace(needle, injection + needle, 1)
+
+          p.write_text(s, encoding='utf-8')
       - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html ual-redesign.css
-          git diff --cached --quiet || git commit -m "style: apply UAL visual redesign"
+          git add index.html ual-redesign.css ual-dashboard.js
+          git diff --cached --quiet || git commit -m "feat: integrate UAL dashboard"
           git push
