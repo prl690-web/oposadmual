@@ -22,10 +22,9 @@ html, body { font-family: 'Catamaran', system-ui, -apple-system, BlinkMacSystemF
 body { background: var(--ual-bg) !important; color: var(--ual-text) !important; letter-spacing: .005em; }
 button, input, select, textarea { font-family: inherit !important; }
 
-/* UAL institutional header: exact institutional blue and visible logo. */
 header, .header, .topbar, .top-bar {
-  background: var(--ual-blue) !important;
-  background-image: url('assets/ual-logo.svg') !important;
+  background-color: var(--ual-blue) !important;
+  background-image: url('assets/ual-logo-original.svg') !important;
   background-repeat: no-repeat !important;
   background-position: 28px center !important;
   background-size: 190px auto !important;
@@ -50,7 +49,6 @@ header p, .header p { font-family:inherit !important; font-size:.88rem !importan
 nav, .nav, .navbar, .tabs, .tab-bar, .navigation { background:#fff !important; border-bottom:1px solid var(--ual-border) !important; }
 nav a, .nav a, .tab, .tab-btn, .nav-item, .navigation button { font-family:inherit !important; font-weight:700 !important; color:var(--ual-blue) !important; }
 nav a:hover, .nav a:hover, .tab:hover, .tab-btn:hover, .nav-item:hover { color:var(--ual-teal) !important; }
-/* Active navigation: the whole tab/card gets a visible UAL background. */
 nav a.active, nav button.active, .nav a.active, .nav button.active,
 .tabs .active, .tab-bar .active, .navigation .active,
 .tab.active, .tab-btn.active, [role="tab"][aria-selected="true"],
@@ -66,20 +64,17 @@ nav a[aria-current="page"], .nav a[aria-current="page"] {
   border:1px solid var(--ual-border) !important; border-radius:var(--ual-radius) !important;
   box-shadow:var(--ual-shadow) !important; background:#fff !important;
 }
-
 button.primary, .primary, .btn-primary, .start-btn, .submit-btn, [class*="primary"] {
   background:var(--ual-blue) !important; border-color:var(--ual-blue) !important; color:#fff !important;
   border-radius:11px !important; font-weight:700 !important;
 }
 button.primary:hover, .primary:hover, .btn-primary:hover, .start-btn:hover, .submit-btn:hover { background:var(--ual-blue-deep) !important; transform:translateY(-1px); }
 button.secondary, .secondary, .btn-secondary { border:1px solid var(--ual-blue) !important; color:var(--ual-blue) !important; background:#fff !important; border-radius:11px !important; font-weight:700 !important; }
-
 .progress-bar, .progress-fill { background:linear-gradient(90deg,var(--ual-blue),var(--ual-teal)) !important; }
 .selected, .current, .is-active { border-color:var(--ual-teal) !important; }
 .badge, .tag { border-radius:999px !important; font-weight:700 !important; }
 h1, h2, h3, h4 { color:var(--ual-text) !important; font-weight:800 !important; }
 small, .muted, .subtitle, .help, .source { color:var(--ual-muted) !important; }
-
 .option, .answer, .answer-option, .question-option {
   border:1px solid var(--ual-border) !important; border-radius:12px !important; background:#fff !important; transition:all .16s ease !important;
 }
