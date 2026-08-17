@@ -29,9 +29,9 @@
     return Object.entries(get().topics).filter(([k])=>k!=='Sin tema').map(([k,v])=>({k,v,p:v.attempts?Math.round(v.correct/v.attempts*100):0}));
   }
   function blockStats(){
-    if(!window.TOPICS)return [];
-    return [...new Set(TOPICS.map(t=>t.block))].map(block=>{
-      const ts=TOPICS.filter(t=>t.block===block);let a=0,c=0;
+  if(typeof TOPICS==='undefined')return [];
+      return [...new Set(TOPICS.map(t=>t.block))].map(block=>{const
+        ts=TOPICS.filter(t=>t.block===block);let a=0,c=0;
       ts.forEach(t=>{const key=t.title;const s=get().topics[key];if(s){a+=s.attempts;c+=s.correct}});
       return {block,a,c,p:a?Math.round(c/a*100):0};
     });
