@@ -1,26 +1,67 @@
 (function(){
   const KEY='oposadmual_progress_v2';
-  const ACT='oposadmual_activity_v2';
   const defaults=()=>({attempts:0,correct:0,wrong:0,topics:{},sessions:[]});
   const get=()=>{try{return Object.assign(defaults(),JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){return defaults()}};
   const save=d=>{try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}};
   const esc=s=>String(s||'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));
-  let lastAnswered='';
 
-  function record(){
-    const q=document.querySelector('#q-text')?.textContent?.trim()||'';
-    const t=document.querySelector('#q-topic-label')?.textContent?.trim()||'Sin tema';
-    if(!q||t==='Sin tema') return;
-    const correct=!!document.querySelector('#q-options .option.correct');
-    const wrong=!!document.querySelector('#q-options .option.incorrect');
-    if(!correct&&!wrong) return;
-    const sig=t+'|'+q;
-    if(sig===lastAnswered) return;
-    lastAnswered=sig;
+  // one-time cleanup: an earlier version of this file stored the per-topic key as
+  // "<titulo> · <badge de dificultad>" (e.g. "Tema 1... · 🟢 Fácil"), which never
+  // matched TOPICS[].title and made every per-topic stat (bloques, progreso,
+  // recomendaciones) come out empty. This merges any such legacy keys back
+  // into the plain topic title.
+  function migrateTopicKeys(){
     const d=get();
-    d.attempts++; if(correct)d.correct++;else d.wrong++;
-    d.topics[t] ||= {attempts:0,correct:0,wrong:0};
-    d.topics[t].attempts++; if(correct)d.topics[t].correct++;else d.topics[t].wrong++;
+    const merged={};
+    let changed=false;
+    Object.keys(d.topics).forEach(k=>{
+      const base=k.split(' · ')[0];
+      if(!merged[base]) merged[base]={attempts:0,correct:0,wrong:0};
+      const v=d.topics[k]||{};
+      merged[base].attempts+=v.attempts||0;
+      merged[base].correct+=v.correct||0;
+      merged[base].wrong+=v.wrong||0;
+      if(base!==k) changed=true;
+    });
+    if(changed){ d.topics=merged; save(d); }
+  }
+
+  // Progress used to be recorded per-question by sniffing CSS classes on the
+  // answered option (.option.correct / .option.incorrect). That is unreliable:
+  // in "drill" mode the correct answer always gets the .correct class added
+  // to reveal it, even when the user picked a different (wrong) option, so
+  // almost every answer looked "correct" to that logic. In "exam" mode those
+  // classes are never added until the review screen, so nothing was recorded
+  // at all. Instead, we record once per finished quiz, reading straight from
+  // the app's own `quiz` state (questions + answers), which is authoritative
+  // and identical for drill and exam mode.
+  function recordFinishedQuiz(){
+    if(typeof quiz==='undefined' || !quiz || !Array.isArray(quiz.questions) || !quiz.questions.length) return;
+    const resultBox=document.querySelector('#quiz-result');
+    if(!resultBox || resultBox.classList.contains('hidden')) return;
+    if(quiz.__recorded) return;
+    quiz.__recorded=true;
+
+    const d=get();
+    quiz.questions.forEach((q,i)=>{
+      const ans=quiz.answers[i];
+      if(ans===undefined) return; // left unanswered (e.g. timer ran out)
+      const ok=ans===q.correct;
+      d.attempts++; if(ok)d.correct++; else d.wrong++;
+      const title=q.topicTitle;
+      if(!title) return;
+      d.topics[title] ||= {attempts:0,correct:0,wrong:0};
+      d.topics[title].attempts++; if(ok)d.topics[title].correct++; else d.topics[title].wrong++;
+    });
+
+    const scoreNum=document.querySelector('#score-num')?.textContent?.trim();
+    const scoreSub=document.querySelector('#score-sub')?.textContent?.trim();
+    if(scoreNum&&scoreSub){
+      const totalMatch=scoreSub.match(/de (\d+)/);
+      d.sessions=d.sessions||[];
+      d.sessions.unshift({label:scoreSub,pct:parseInt(scoreNum,10)||0,total:totalMatch?totalMatch[1]:''});
+      d.sessions=d.sessions.slice(0,10);
+    }
     save(d); renderHome();
   }
 
@@ -29,10 +70,14 @@
     return Object.entries(get().topics).filter(([k])=>k!=='Sin tema').map(([k,v])=>({k,v,p:v.attempts?Math.round(v.correct/v.attempts*100):0}));
   }
   function blockStats(){
-  if(typeof TOPICS==='undefined')return [];
-      return [...new Set(TOPICS.map(t=>t.block))].map(block=>{const
-        ts=TOPICS.filter(t=>t.block===block);let a=0,c=0;
-      ts.forEach(t=>{const key=t.title;const s=get().topics[key];if(s){a+=s.attempts;c+=s.correct}});
+    if(typeof TOPICS==='undefined')return [];
+    return [...new Set(TOPICS.map(t=>t.block))].map(block=>{
+      const ts=TOPICS.filter(t=>t.block===block);
+      let a=0,c=0;
+      ts.forEach(t=>{
+        const s=get().topics[t.title];
+        if(s){ a+=s.attempts; c+=s.correct; }
+      });
       return {block,a,c,p:a?Math.round(c/a*100):0};
     });
   }
@@ -100,12 +145,13 @@
   };
 
   function inject(){
+    migrateTopicKeys();
     replaceHeader();replaceNav();injectHome();injectSupuestos();renderHome();
     if(window.renderProgress===undefined||!window.renderProgress.__v2){const fn=renderProgressV2;fn.__v2=true;window.renderProgress=fn}
     showTab('home');
   }
 
-  const observer=new MutationObserver(()=>{record()});
+  const observer=new MutationObserver(()=>{recordFinishedQuiz();});
   observer.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
   window.addEventListener('load',()=>{inject();setTimeout(inject,250)});
   setTimeout(inject,50);
