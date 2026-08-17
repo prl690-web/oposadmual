@@ -111,7 +111,7 @@
     if(document.querySelector('#tab-supuestos'))return;
     const main=document.querySelector('main'), progress=document.querySelector('#tab-progress');if(!main||!progress)return;
     const sec=document.createElement('section');sec.id='tab-supuestos';sec.className='hidden';
-    sec.innerHTML=`<div class="section-hero"><div class="eyebrow dark">BLOQUE II · NORMATIVA UNIVERSITARIA</div><h2>Supuestos prácticos</h2><p>Entrena la aplicación de la normativa universitaria a situaciones administrativas concretas.</p><span class="coming-badge">MÓDULO EN PREPARACIÓN</span></div><div class="dashboard-card placeholder-card"><div class="placeholder-icon">◇</div><h3>Próximamente</h3><p>Prepararemos supuestos de hasta 15 preguntas y, después, simulacros de 2 supuestos como en la convocatoria.</p><button class="btn secondary" onclick="showTab('test')">Mientras tanto, hacer test →</button></div>`;
+    sec.innerHTML=`<div class="section-hero"><div class="eyebrow dark">BLOQUE II · NORMATIVA UNIVERSITARIA</div><h2>Supuestos prácticos</h2><p>Entrena la aplicación de la normativa universitaria a situaciones administrativas concretas.</p></div><div class="dashboard-card placeholder-card"><div class="placeholder-icon">◇</div><h3>Próximamente</h3><p>Prepararemos supuestos de hasta 15 preguntas y, después, simulacros de 2 supuestos como en la convocatoria.</p><button class="btn secondary" onclick="showTab('test')">Mientras tanto, hacer test →</button></div>`;
     main.insertBefore(sec,progress);
   }
 
